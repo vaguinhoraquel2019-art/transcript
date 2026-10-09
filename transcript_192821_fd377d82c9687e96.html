@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Transcript #192821</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Fundo rosa animado ── */
+    @keyframes bgMove {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes bubble {
+      0%   { transform: translateY(0) scale(1);      opacity: .35; }
+      50%  { transform: translateY(-80px) scale(1.15); opacity: .18; }
+      100% { transform: translateY(0) scale(1);      opacity: .35; }
+    }
+    @keyframes shimmer {
+      0%,100% { opacity: .85; }
+      50%     { opacity: 1;   }
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg,#ff80ab,#f06292,#e91e8c,#ad1457,#c2185b,#ff80ab);
+      background-size: 400% 400%;
+      animation: bgMove 12s ease infinite;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Bolhas */
+    .bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bubble  {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      animation: bubble linear infinite;
+    }
+
+    .wrapper {
+      position: relative; z-index: 1;
+      max-width: 920px; margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: rgba(0,0,0,.48);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      animation: shimmer 5s ease infinite;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header h1 { font-size: 1.6rem; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,.4); }
+    .header h1 span { color: #ff80ab; }
+    .badge-finalizado {
+      background: linear-gradient(135deg,#ff80ab,#e91e8c);
+      border-radius: 20px; padding: 5px 16px;
+      font-size: .75rem; font-weight: 700;
+      letter-spacing: .5px; text-transform: uppercase;
+      box-shadow: 0 2px 12px rgba(233,30,140,.4);
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
+    }
+    .info-card {
+      background: rgba(255,255,255,.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .info-card .label {
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: 1px; color: rgba(255,255,255,.55);
+      margin-bottom: 4px;
+    }
+    .info-card .value { font-size: .92rem; font-weight: 600; }
+
+    /* ── Mensagens ── */
+    .messages-box {
+      background: rgba(0,0,0,.52);
+      backdrop-filter: blur(14px);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+    .messages-header {
+      padding: 13px 20px;
+      background: rgba(255,255,255,.07);
+      font-size: .78rem; color: rgba(255,255,255,.5);
+      letter-spacing: .5px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .messages-list { padding: 6px 0; }
+
+    .message {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 9px 20px;
+      transition: background .15s;
+    }
+    .message:hover  { background: rgba(255,255,255,.04); }
+    .message.bot-msg { background: rgba(255,128,171,.04); }
+
+    .avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0; margin-top: 2px;
+      border: 2px solid rgba(255,255,255,.15);
+    }
+    .msg-body { flex: 1; min-width: 0; }
+    .msg-header {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 3px; flex-wrap: wrap;
+    }
+    .username           { font-weight: 700; font-size: .88rem; color: #ff80ab; }
+    .username.bot-tag   { color: #80d8ff; }
+    .badge {
+      display: inline-block; background: #5865f2; color: #fff;
+      font-size: .58rem; font-weight: 700;
+      padding: 1px 5px; border-radius: 4px;
+      letter-spacing: .5px; text-transform: uppercase;
+    }
+    .timestamp { font-size: .7rem; color: rgba(255,255,255,.32); }
+    .msg-content {
+      font-size: .87rem; line-height: 1.55;
+      color: rgba(255,255,255,.88); word-break: break-word;
+    }
+    .embed {
+      margin-top: 6px; background: rgba(0,0,0,.32);
+      border-radius: 6px; padding: 10px 12px; max-width: 520px;
+    }
+    .embed-title { font-weight: 700; font-size: .86rem; margin-bottom: 4px; }
+    .embed-desc  { font-size: .8rem; color: rgba(255,255,255,.72); line-height: 1.5; }
+
+    .empty-state {
+      padding: 28px; text-align: center;
+      color: rgba(255,255,255,.28); font-size: .85rem;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center; margin-top: 20px;
+      font-size: .7rem; color: rgba(255,255,255,.28);
+    }
+
+    @media (max-width: 600px) {
+      .info-grid { grid-template-columns: 1fr 1fr; }
+      .header h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bubbles" aria-hidden="true">
+  <div class="bubble" style="width:130px;height:130px;left:4%;top:8%;animation-duration:9s;animation-delay:0s"></div>
+  <div class="bubble" style="width:75px;height:75px;left:22%;top:58%;animation-duration:12s;animation-delay:2s"></div>
+  <div class="bubble" style="width:200px;height:200px;left:68%;top:4%;animation-duration:15s;animation-delay:1s"></div>
+  <div class="bubble" style="width:55px;height:55px;left:84%;top:48%;animation-duration:10s;animation-delay:3s"></div>
+  <div class="bubble" style="width:145px;height:145px;left:44%;top:72%;animation-duration:13s;animation-delay:.5s"></div>
+  <div class="bubble" style="width:48px;height:48px;left:32%;top:28%;animation-duration:11s;animation-delay:4s"></div>
+  <div class="bubble" style="width:90px;height:90px;left:58%;top:38%;animation-duration:8s;animation-delay:1.5s"></div>
+</div>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-top">
+      <h1>Transcript <span>#192821</span></h1>
+      <span class="badge-finalizado">✓ Finalizado</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="label">Categoria</div>
+        <div class="value">&lt;:emoji_584120:1558168353615515710&gt; Suporte</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Usuário</div>
+        <div class="value">ricarte.777</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Staff</div>
+        <div class="value">ricarte.777</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Aberto em</div>
+        <div class="value">09/10/2026, 16:41:05</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Finalizado em</div>
+        <div class="value">09/10/2026, 16:42:57</div>
+      </div>
+      <div class="info-card">
+        <div class="label">Mensagens</div>
+        <div class="value">7</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="messages-box">
+    <div class="messages-header">💬 Conversa do ticket</div>
+    <div class="messages-list">
+      
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:41:07</span>
+      </div>
+      
+      
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:41:08</span>
+      </div>
+      <div class="msg-content">&lt;@1553675169472708608&gt; &lt;@&amp;1547254788930928720&gt; &lt;@&amp;1547254788930928720&gt;</div>
+      
+        <div class="embed" style="border-left:4px solid #7b1fa2;">
+          <div class="embed-title">Ticket Criado com Sucesso! 📌</div>
+          
+        </div>
+        <div class="embed" style="border-left:4px solid #b71c1c;">
+          
+          <div class="embed-desc">**OBS: Procure manter sua DM aberta para receber uma cópia deste ticket e a opção de avaliar seu atendimento.**</div>
+        </div>
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:41:37</span>
+      </div>
+      <div class="msg-content">Olá &lt;@1553675169472708608&gt;! 👋 Meu nome é **ricarte.777**, serei seu atendente hoje. Como posso te ajudar?</div>
+      
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:41:44</span>
+      </div>
+      
+      
+        <div class="embed" style="border-left:4px solid #2ecc71;">
+          
+          <div class="embed-desc">✅ &lt;@1553675169472708608&gt; assumiu o atendimento deste ticket.</div>
+        </div>
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:41:47</span>
+      </div>
+      
+      
+        <div class="embed" style="border-left:4px solid #2ecc71;">
+          
+          <div class="embed-desc">✅ &lt;@1553675169472708608&gt; assumiu o atendimento deste ticket.</div>
+        </div>
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:42:03</span>
+      </div>
+      <div class="msg-content">📢 &lt;@1553675169472708608&gt;, você está sendo chamado neste ticket!</div>
+      
+    </div>
+  </div>
+  <div class="message bot-msg">
+    <img class="avatar" src="https://cdn.discordapp.com/avatars/1557445505510932600/637e43bc12d24be35afb6f4206b867a7.webp?size=32" alt="av"
+         onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="username bot-tag">Chalotte Pvp <span class="badge">BOT</span></span>
+        <span class="timestamp">09/10/2026, 16:43:00</span>
+      </div>
+      
+      
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <div class="footer">Transcript gerado automaticamente &middot; Não requer senha para visualizar.</div>
+</div>
+
+</body>
+</html>
