@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transcripts</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    @keyframes bgMove {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #ff80ab, #f06292, #e91e8c, #ad1457, #c2185b, #ff80ab);
+      background-size: 400% 400%;
+      animation: bgMove 12s ease infinite;
+      color: #fff;
+    }
+    .box {
+      background: rgba(0,0,0,.45);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 40px 48px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; }
+    p  { color: rgba(255,255,255,.6); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>📋 Transcripts</h1>
+    <p>Acesse o link enviado no seu ticket para visualizar o transcript.</p>
+  </div>
+</body>
+</html>
